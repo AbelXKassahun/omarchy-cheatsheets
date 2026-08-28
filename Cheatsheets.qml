@@ -131,8 +131,15 @@ Item {
 
     root.selectedIndex = Search.firstEntry(next)
     // Always land at the very top: the first row is a section header, and
-    // positioning on the first *entry* would scroll it off screen.
-    Qt.callLater(function() { resultList.positionViewAtBeginning() })
+    // positioning on the first *entry* would scroll it off screen. contentY is
+    // set directly as well because positionViewAtBeginning alone does not
+    // reliably take on a variable-height delegate that has not been laid out
+    // yet — which is exactly the case right after the model is refilled.
+    resultList.contentY = 0
+    Qt.callLater(function() {
+      resultList.positionViewAtBeginning()
+      resultList.contentY = 0
+    })
   }
 
   function setFilter(next) {
@@ -163,7 +170,12 @@ Item {
   }
 
   function movePage(delta) {
-    var perPage = Math.max(1, Math.floor(resultList.height / root.rowHeight) - 1)
+    // Rows are variable height now, so page size comes from the measured
+    // average rather than the minimum row height.
+    var average = rowModel.count > 0 && resultList.contentHeight > 0
+      ? resultList.contentHeight / rowModel.count
+      : root.rowHeight
+    var perPage = Math.max(1, Math.floor(resultList.height / Math.max(1, average)) - 1)
     move(delta * perPage)
   }
 
@@ -504,7 +516,12 @@ Item {
             boundsBehavior: Flickable.StopAtBounds
             visible: rowModel.count > 0
 
+            // Rows size to their content rather than to a fixed height: a
+            // cheatsheet is full of long commands (`docker system prune -a
+            // --volumes`), and eliding them defeats the point of looking one up.
             delegate: Item {
+              id: row
+
               required property int index
               required property string type
               required property string title
@@ -513,18 +530,23 @@ Item {
 
               readonly property bool isSection: type === "section"
               readonly property bool hasCursor: !isSection && index === root.selectedIndex
+              readonly property int verticalPadding: Style.spacing.md
 
               width: resultList.width
-              height: isSection ? root.headerRowHeight : root.rowHeight
+              height: isSection
+                ? root.headerRowHeight
+                : Math.max(root.rowHeight,
+                           Math.max(keyText.implicitHeight, descText.implicitHeight)
+                             + row.verticalPadding * 2)
 
               // Section header
               Text {
-                visible: parent.isSection
+                visible: row.isSection
                 anchors.left: parent.left
                 anchors.leftMargin: Style.spacing.sm
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: Style.spacing.xs
-                text: parent.title.toUpperCase()
+                text: row.title.toUpperCase()
                 color: root.accent
                 font.family: root.fontFamily
                 font.pixelSize: Style.font.caption
@@ -534,47 +556,50 @@ Item {
 
               // Entry row
               Rectangle {
-                visible: !parent.isSection
+                visible: !row.isSection
                 anchors.fill: parent
                 anchors.rightMargin: Style.spacing.sm
                 radius: root.cornerRadius
-                color: parent.hasCursor ? root.selectedBackground : "transparent"
+                color: row.hasCursor ? root.selectedBackground : "transparent"
 
                 Text {
                   id: keyText
-                  anchors.verticalCenter: parent.verticalCenter
+                  anchors.top: parent.top
+                  anchors.topMargin: row.verticalPadding
                   anchors.left: parent.left
                   anchors.leftMargin: Style.spacing.rowPaddingX
                   width: Math.min(root.keyColumnWidth, parent.width * 0.42)
-                  text: keys
+                  text: row.keys
                   color: root.selectedText
                   font.family: root.fontFamily
                   font.pixelSize: Style.font.body
                   font.bold: true
-                  elide: Text.ElideRight
+                  wrapMode: Text.Wrap
                 }
 
                 Text {
-                  anchors.verticalCenter: parent.verticalCenter
+                  id: descText
+                  anchors.top: parent.top
+                  anchors.topMargin: row.verticalPadding
                   anchors.left: keyText.right
                   anchors.leftMargin: Style.spacing.lg
                   anchors.right: parent.right
                   anchors.rightMargin: Style.spacing.rowPaddingX
-                  text: desc
+                  text: row.desc
                   color: root.foreground
                   opacity: 0.85
                   font.family: root.fontFamily
                   font.pixelSize: Style.font.body
-                  elide: Text.ElideRight
+                  wrapMode: Text.Wrap
                 }
 
                 MouseArea {
                   anchors.fill: parent
                   hoverEnabled: true
                   cursorShape: Qt.PointingHandCursor
-                  onContainsMouseChanged: if (containsMouse) root.selectedIndex = index
+                  onContainsMouseChanged: if (containsMouse) root.selectedIndex = row.index
                   onClicked: {
-                    root.selectedIndex = index
+                    root.selectedIndex = row.index
                     root.copySelected()
                   }
                 }
