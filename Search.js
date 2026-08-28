@@ -24,21 +24,43 @@ function tokenize(query) {
   return out
 }
 
-// Subsequence match — "dckr" matches "docker". Only used when the plain
-// substring test fails, so exact typing is never penalised by fuzzy noise.
+// Subsequence match — "dckr" finds "docker". Kept deliberately tight: an
+// unconstrained subsequence matches almost any long string ("stash" is a
+// subsequence of half the tmux sheet), which buries the real answers under
+// noise. Requiring the matched characters to sit in a short span means an
+// abbreviation still matches while prose does not.
 function subsequence(needle, haystack) {
   var n = 0
+  var first = -1
   for (var h = 0; h < haystack.length && n < needle.length; h++) {
-    if (haystack[h] === needle[n]) n++
+    if (haystack[h] === needle[n]) {
+      if (first === -1) first = h
+      n++
+      if (n === needle.length) {
+        return (h - first + 1) <= needle.length * 3 + 2
+      }
+    }
   }
-  return n === needle.length
+  return false
+}
+
+function isWordStart(haystack, index) {
+  return index === 0 || !/[a-z0-9]/.test(haystack.charAt(index - 1))
+}
+
+// Best score for one token against one field, or -1. `wordBonus` and `base`
+// differ per field so a hit in the key chord outranks a hit in the prose.
+function fieldScore(haystack, token, base, wordBonus) {
+  var at = haystack.indexOf(token)
+  if (at === -1) return -1
+  var score = base - Math.min(at, 30)
+  if (isWordStart(haystack, at)) score += wordBonus
+  return score
 }
 
 // Returns a score, or -1 for no match. Higher is better.
-// A hit in the key chord beats a hit in the description, and an early hit beats
-// a late one, so searching "stash" puts `git stash` above a line that merely
-// mentions stashing.
-function scoreEntry(entry, tokens, sectionTitle, sheetName) {
+// `fuzzy` is only ever true on the fallback pass — see searchRows.
+function scoreEntry(entry, tokens, sectionTitle, sheetName, fuzzy) {
   if (tokens.length === 0) return 0
 
   var keys = normalize(entry.keys)
@@ -49,18 +71,14 @@ function scoreEntry(entry, tokens, sectionTitle, sheetName) {
 
   for (var i = 0; i < tokens.length; i++) {
     var token = tokens[i]
-    var best = -1
-
-    var atKeys = keys.indexOf(token)
-    if (atKeys !== -1) best = 100 - Math.min(atKeys, 40)
-
-    var atDesc = desc.indexOf(token)
-    if (atDesc !== -1) best = Math.max(best, 70 - Math.min(atDesc, 40))
+    var best = Math.max(fieldScore(keys, token, 85, 15),
+                        fieldScore(desc, token, 55, 20))
 
     if (section.indexOf(token) !== -1) best = Math.max(best, 25)
     if (sheet.indexOf(token) !== -1) best = Math.max(best, 20)
 
-    if (best === -1) {
+    if (best < 0) {
+      if (!fuzzy) return -1
       if (subsequence(token, keys)) best = 12
       else if (subsequence(token, desc)) best = 8
       else return -1
@@ -69,11 +87,17 @@ function scoreEntry(entry, tokens, sectionTitle, sheetName) {
     total += best
   }
 
-  // Whole-query hits on a short key chord are almost always what was wanted.
+  // Whole-query bonuses. Typing the exact chord should always win; a prefix of
+  // a *short* chord is nearly as good, but "detach" prefixing the 21-character
+  // "detach-on-destroy off" says much less, so the bonus scales with how much
+  // of the chord the query actually covers.
   var whole = tokens.join(" ")
-  if (keys === whole) total += 200
-  else if (keys.indexOf(whole) === 0) total += 60
-  else if (desc.indexOf(whole) === 0) total += 30
+  if (keys === whole) {
+    total += 250
+  } else if (keys.indexOf(whole) === 0) {
+    total += Math.round(80 * Math.min(1, whole.length / Math.max(1, keys.length)))
+  }
+  if (desc.indexOf(whole) === 0) total += 70
 
   return total
 }
@@ -99,16 +123,9 @@ function sheetRows(sheet) {
   return rows
 }
 
-// Filtered view across every sheet. Results are grouped by sheet, the active
-// one first, so a search never hides what you were already looking at — while
-// still surfacing the answer when it turns out to live under another tool.
-function searchRows(sheets, query, activeId, limit) {
-  var tokens = tokenize(query)
-  var rows = []
-  if (!sheets || sheets.length === 0 || tokens.length === 0) return rows
-
+// Score every entry in every sheet, keeping only the sheets that matched.
+function collect(sheets, tokens, fuzzy) {
   var groups = []
-  var kept = 0
 
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i]
@@ -118,7 +135,7 @@ function searchRows(sheets, query, activeId, limit) {
       var section = sheet.sections[s]
       for (var e = 0; e < section.entries.length; e++) {
         var entry = section.entries[e]
-        var score = scoreEntry(entry, tokens, section.title, sheet.name)
+        var score = scoreEntry(entry, tokens, section.title, sheet.name, fuzzy)
         if (score < 0) continue
         hits.push({
           type: "entry",
@@ -136,9 +153,39 @@ function searchRows(sheets, query, activeId, limit) {
     groups.push({ id: sheet.id, name: sheet.name, icon: sheet.icon, hits: hits })
   }
 
+  return groups
+}
+
+// Filtered view across every sheet. Results are grouped by sheet, the active
+// one first, so a search never hides what you were already looking at — while
+// still surfacing the answer when it turns out to live under another tool.
+function searchRows(sheets, query, activeId, limit) {
+  var tokens = tokenize(query)
+  var rows = []
+  if (!sheets || sheets.length === 0 || tokens.length === 0) return rows
+
+  // Two passes. Fuzzy matching only runs when literal matching found nothing at
+  // all, so typing a real word is never diluted by approximate hits — the pass
+  // exists to rescue abbreviations ("nxt tb"), not to pad the results.
+  var wasFuzzy = false
+  var groups = collect(sheets, tokens, false)
+  if (groups.length === 0) {
+    groups = collect(sheets, tokens, true)
+    wasFuzzy = true
+  }
+  if (groups.length === 0) return rows
+
+  var kept = 0
+
+  // On a literal match the active sheet floats to the top, so a search never
+  // hides the tool you were already looking at. Fuzzy results get no such
+  // favour: an approximate hit in the current sheet is not evidence of
+  // anything, and floating it would bury the exact answer under it.
   groups.sort(function(a, b) {
-    if (a.id === activeId) return -1
-    if (b.id === activeId) return 1
+    if (!wasFuzzy) {
+      if (a.id === activeId) return -1
+      if (b.id === activeId) return 1
+    }
     return b.hits[0].score - a.hits[0].score
   })
 

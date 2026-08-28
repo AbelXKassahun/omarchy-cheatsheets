@@ -130,10 +130,9 @@ Item {
     for (var i = 0; i < next.length; i++) rowModel.append(next[i])
 
     root.selectedIndex = Search.firstEntry(next)
-    Qt.callLater(function() {
-      if (root.selectedIndex >= 0) resultList.positionViewAtIndex(root.selectedIndex, ListView.Beginning)
-      else resultList.positionViewAtBeginning()
-    })
+    // Always land at the very top: the first row is a section header, and
+    // positioning on the first *entry* would scroll it off screen.
+    Qt.callLater(function() { resultList.positionViewAtBeginning() })
   }
 
   function setFilter(next) {
