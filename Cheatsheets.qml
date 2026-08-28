@@ -566,6 +566,9 @@ Item {
                 if (dy === 0) return
                 var max = Math.max(0, resultList.contentHeight - resultList.height)
                 resultList.contentY = Math.max(0, Math.min(max, resultList.contentY - dy))
+                // Claim the event so the ListView's own wheel handling does not
+                // apply a second, smaller scroll on top of this one.
+                event.accepted = true
               }
             }
 
