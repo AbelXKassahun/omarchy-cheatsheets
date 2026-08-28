@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "abelk.cheatsheets",
+  "name": "Cheatsheets",
+  "version": "1.0.0",
+  "author": "Abel.K",
+  "license": "MIT",
+  "description": "Searchable hotkey and command cheatsheets for tmux, docker, nvim, Unity and any tool you add yourself.",
+  "keywords": [
+    "cheatsheet",
+    "shortcuts",
+    "hotkeys",
+    "keybindings",
+    "reference",
+    "tmux",
+    "docker",
+    "nvim",
+    "unity"
+  ],
+  "kinds": [
+    "overlay",
+    "bar-widget"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "overlay": "Cheatsheets.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Cheatsheets",
+    "description": "Open the cheatsheet lookup",
+    "category": "Productivity",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

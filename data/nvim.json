@@ -1,0 +1,405 @@
+{
+  "id": "nvim",
+  "name": "Neovim",
+  "icon": "",
+  "order": 40,
+  "detect": [
+    "nvim"
+  ],
+  "note": "Vim motions plus LazyVim's defaults — the distro installed at ~/.config/nvim. Leader is Space.",
+  "sections": [
+    {
+      "title": "Modes and the basics",
+      "entries": [
+        {
+          "keys": "i  a",
+          "desc": "Insert before / after the cursor"
+        },
+        {
+          "keys": "I  A",
+          "desc": "Insert at start / end of the line"
+        },
+        {
+          "keys": "o  O",
+          "desc": "Open a new line below / above"
+        },
+        {
+          "keys": "v  V  C-v",
+          "desc": "Visual, visual line, visual block"
+        },
+        {
+          "keys": "Escape  or  C-[",
+          "desc": "Back to normal mode"
+        },
+        {
+          "keys": ":w  :q  :wq  :q!",
+          "desc": "Write, quit, write-and-quit, quit discarding changes"
+        },
+        {
+          "keys": "u  C-r",
+          "desc": "Undo / redo"
+        },
+        {
+          "keys": ".",
+          "desc": "Repeat the last change"
+        }
+      ]
+    },
+    {
+      "title": "Moving around",
+      "entries": [
+        {
+          "keys": "h j k l",
+          "desc": "Left, down, up, right"
+        },
+        {
+          "keys": "w  b  e",
+          "desc": "Next word, previous word, end of word"
+        },
+        {
+          "keys": "0  ^  $",
+          "desc": "Line start, first non-blank, line end"
+        },
+        {
+          "keys": "gg  G",
+          "desc": "Top / bottom of the file"
+        },
+        {
+          "keys": "42G  or  :42",
+          "desc": "Jump to line 42"
+        },
+        {
+          "keys": "C-u  C-d",
+          "desc": "Half page up / down"
+        },
+        {
+          "keys": "{  }",
+          "desc": "Previous / next paragraph"
+        },
+        {
+          "keys": "%",
+          "desc": "Jump to the matching bracket"
+        },
+        {
+          "keys": "f{char}  t{char}",
+          "desc": "Jump to / just before the next char on the line"
+        },
+        {
+          "keys": ";  ,",
+          "desc": "Repeat that f/t jump forward / backward"
+        },
+        {
+          "keys": "C-o  C-i",
+          "desc": "Jump back / forward through the jump list"
+        },
+        {
+          "keys": "zz  zt  zb",
+          "desc": "Center / top / bottom the current line on screen"
+        }
+      ]
+    },
+    {
+      "title": "Editing",
+      "entries": [
+        {
+          "keys": "dd  yy  p  P",
+          "desc": "Delete line, yank line, paste after / before"
+        },
+        {
+          "keys": "dw  d$  dG",
+          "desc": "Delete word, to end of line, to end of file"
+        },
+        {
+          "keys": "ciw  diw  yiw",
+          "desc": "Change / delete / yank the word under the cursor"
+        },
+        {
+          "keys": "ci\"  ci(  cit",
+          "desc": "Change inside quotes / parens / an HTML tag"
+        },
+        {
+          "keys": "x  r{char}  ~",
+          "desc": "Delete char, replace char, toggle case"
+        },
+        {
+          "keys": "cc  C  D",
+          "desc": "Change line, change to end, delete to end"
+        },
+        {
+          "keys": ">>  <<",
+          "desc": "Indent / unindent the line"
+        },
+        {
+          "keys": "J",
+          "desc": "Join this line with the next"
+        },
+        {
+          "keys": "gcc  gc (visual)",
+          "desc": "Toggle comment on the line / selection"
+        },
+        {
+          "keys": "gUiw  guiw",
+          "desc": "Upper / lower case the word"
+        }
+      ]
+    },
+    {
+      "title": "Search and replace",
+      "entries": [
+        {
+          "keys": "/pattern  ?pattern",
+          "desc": "Search forward / backward"
+        },
+        {
+          "keys": "n  N",
+          "desc": "Next / previous match"
+        },
+        {
+          "keys": "*  #",
+          "desc": "Search for the word under the cursor, forward / back"
+        },
+        {
+          "keys": ":%s/old/new/g",
+          "desc": "Replace throughout the file"
+        },
+        {
+          "keys": ":%s/old/new/gc",
+          "desc": "Replace throughout, confirming each one"
+        },
+        {
+          "keys": ":s/old/new/g",
+          "desc": "Replace on the current line only"
+        },
+        {
+          "keys": "<leader>ur",
+          "desc": "LazyVim: clear search highlight and redraw"
+        }
+      ]
+    },
+    {
+      "title": "Files and search (LazyVim)",
+      "entries": [
+        {
+          "keys": "<leader><space>",
+          "desc": "Find file in the project root"
+        },
+        {
+          "keys": "<leader>ff",
+          "desc": "Find file"
+        },
+        {
+          "keys": "<leader>fr",
+          "desc": "Recent files"
+        },
+        {
+          "keys": "<leader>fb",
+          "desc": "Switch buffer"
+        },
+        {
+          "keys": "<leader>fn",
+          "desc": "New file"
+        },
+        {
+          "keys": "<leader>/",
+          "desc": "Grep across the project"
+        },
+        {
+          "keys": "<leader>sg",
+          "desc": "Grep (same thing, mnemonic form)"
+        },
+        {
+          "keys": "<leader>sw",
+          "desc": "Search for the word under the cursor"
+        },
+        {
+          "keys": "<leader>ss",
+          "desc": "Jump to a symbol in this document"
+        },
+        {
+          "keys": "<leader>sk",
+          "desc": "List all keymaps — nvim's own cheatsheet"
+        },
+        {
+          "keys": "<leader>:",
+          "desc": "Command history"
+        }
+      ]
+    },
+    {
+      "title": "Buffers, windows, tabs (LazyVim)",
+      "entries": [
+        {
+          "keys": "H  L  or  S-h  S-l",
+          "desc": "Previous / next buffer"
+        },
+        {
+          "keys": "<leader>bd",
+          "desc": "Delete this buffer"
+        },
+        {
+          "keys": "<leader>bo",
+          "desc": "Delete all other buffers"
+        },
+        {
+          "keys": "<leader>bb",
+          "desc": "Switch to the last buffer"
+        },
+        {
+          "keys": "C-h/j/k/l",
+          "desc": "Move between splits (works into tmux panes too)"
+        },
+        {
+          "keys": "<leader>|  <leader>-",
+          "desc": "Split window right / below"
+        },
+        {
+          "keys": "<leader>wd",
+          "desc": "Close the current window"
+        },
+        {
+          "keys": "C-Up/Down/Left/Right",
+          "desc": "Resize the current split"
+        },
+        {
+          "keys": "<leader><tab><tab>",
+          "desc": "New tab"
+        }
+      ]
+    },
+    {
+      "title": "LSP and code (LazyVim)",
+      "entries": [
+        {
+          "keys": "gd",
+          "desc": "Go to definition"
+        },
+        {
+          "keys": "gr",
+          "desc": "Find references"
+        },
+        {
+          "keys": "gI",
+          "desc": "Go to implementation"
+        },
+        {
+          "keys": "gy",
+          "desc": "Go to type definition"
+        },
+        {
+          "keys": "K",
+          "desc": "Hover documentation"
+        },
+        {
+          "keys": "gK",
+          "desc": "Signature help"
+        },
+        {
+          "keys": "<leader>ca",
+          "desc": "Code action"
+        },
+        {
+          "keys": "<leader>cr",
+          "desc": "Rename symbol"
+        },
+        {
+          "keys": "<leader>cf",
+          "desc": "Format the buffer"
+        },
+        {
+          "keys": "<leader>cd",
+          "desc": "Show the diagnostic under the cursor"
+        },
+        {
+          "keys": "]d  [d",
+          "desc": "Next / previous diagnostic"
+        },
+        {
+          "keys": "]e  [e",
+          "desc": "Next / previous error"
+        },
+        {
+          "keys": "<leader>xx",
+          "desc": "Diagnostics list (Trouble)"
+        },
+        {
+          "keys": "<leader>xq",
+          "desc": "Quickfix list"
+        }
+      ]
+    },
+    {
+      "title": "Git and tools (LazyVim)",
+      "entries": [
+        {
+          "keys": "<leader>gg",
+          "desc": "Open lazygit at the project root"
+        },
+        {
+          "keys": "<leader>gb",
+          "desc": "Git blame this line"
+        },
+        {
+          "keys": "<leader>ghs  <leader>ghr",
+          "desc": "Stage / reset the hunk under the cursor"
+        },
+        {
+          "keys": "]h  [h",
+          "desc": "Next / previous git hunk"
+        },
+        {
+          "keys": "<leader>e",
+          "desc": "File explorer at the project root"
+        },
+        {
+          "keys": "<leader>ft",
+          "desc": "Open a terminal at the root"
+        },
+        {
+          "keys": "C-/",
+          "desc": "Toggle the floating terminal"
+        },
+        {
+          "keys": "<leader>l",
+          "desc": "Open the Lazy plugin manager"
+        },
+        {
+          "keys": "<leader>cm",
+          "desc": "Open Mason (LSP/tool installer)"
+        },
+        {
+          "keys": "<leader>qq",
+          "desc": "Quit everything"
+        }
+      ]
+    },
+    {
+      "title": "Marks, macros, registers",
+      "entries": [
+        {
+          "keys": "ma  'a",
+          "desc": "Set mark a / jump to mark a"
+        },
+        {
+          "keys": "qa … q",
+          "desc": "Record a macro into register a, then stop"
+        },
+        {
+          "keys": "@a  @@",
+          "desc": "Play macro a / replay the last one"
+        },
+        {
+          "keys": "\"ayy  \"ap",
+          "desc": "Yank into register a / paste from it"
+        },
+        {
+          "keys": "\"+y  \"+p",
+          "desc": "Yank to / paste from the system clipboard"
+        },
+        {
+          "keys": ":reg",
+          "desc": "Show what's in every register"
+        }
+      ]
+    }
+  ]
+}

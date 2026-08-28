@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+#
+# Emit the "sections" array for the Omarchy/Hyprland cheatsheet, built from the
+# live config rather than a table someone has to remember to update.
+#
+# `omarchy-menu-keybindings --print` is the right source: Hyprland reports Lua
+# binds as dispatcher __lua with the key stripped off (59 of 225 on a stock
+# install), and that command already carries the Lua evaluation and xkb keycode
+# resolution needed to put the keys back. Parsing `hyprctl binds -j` here would
+# mean reimplementing both and getting a third of the sheet wrong.
+#
+# Prints a JSON array on stdout. Exits non-zero if the bindings can't be read,
+# which leaves the fallback sections in data/hyprland.json in place.
+
+set -o pipefail
+
+command -v omarchy-menu-keybindings >/dev/null 2>&1 || exit 1
+command -v jq >/dev/null 2>&1 || exit 1
+
+raw=$(omarchy-menu-keybindings --print 2>/dev/null) || exit 1
+[[ -n $raw ]] || exit 1
+
+# Lines look like: "SUPER SHIFT + RETURN                → Browser".
+# Split on the arrow, trim, and bucket by what the action says. Ordering of the
+# buckets is the display order; anything unmatched falls through to "Other".
+printf '%s\n' "$raw" | jq -Rn '
+  def trim: sub("^\\s+"; "") | sub("\\s+$"; "");
+
+  def bucket($action):
+    ($action | ascii_downcase) as $a
+    | if   $a | test("workspace")                              then "Workspaces"
+      elif $a | test("window|full screen|full width|float|tile|split|pop |resize|expand|shrink|swap|move focus")
+                                                                then "Windows"
+      elif $a | test("volume|mute|brightness|play|pause|next track|previous track|media|mic")
+                                                                then "Media & hardware"
+      elif $a | test("screenshot|record|capture|colou?r picker|ocr|share")
+                                                                then "Capture & share"
+      elif $a | test("menu|launcher|keybindings|emoji|clipboard|notification|theme|background|bar |panel")
+                                                                then "Menus & panels"
+      elif $a | test("lock|suspend|reboot|shut ?down|logout|update|system|night ?light|idle")
+                                                                then "System"
+      elif $a | test("copy|paste|cut|clipboard")                 then "Clipboard"
+      else "Launch & other"
+      end;
+
+  [ inputs
+    | select(test("→"))
+    | ( split("→") ) as $parts
+    | select($parts | length >= 2)
+    | { keys:  ($parts[0] | trim | gsub("\\s*\\+\\s*"; " + ") | gsub("\\s+"; " ")),
+        desc:  ($parts[1:] | join("→") | trim) }
+    | select(.keys != "" and .desc != "")
+    | . + { __b: bucket(.desc) }
+  ]
+  | group_by(.__b)
+  | map({ title: .[0].__b,
+          entries: map({ keys, desc }) })
+  # Fixed section order, then any bucket the list below missed.
+  | ( ["Menus & panels","Windows","Workspaces","Launch & other","Clipboard","Capture & share","Media & hardware","System"] ) as $order
+  | sort_by( . as $s | ($order | index($s.title)) // 999 )
+'

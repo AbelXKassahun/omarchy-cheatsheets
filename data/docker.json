@@ -1,0 +1,253 @@
+{
+  "id": "docker",
+  "name": "Docker",
+  "icon": "",
+  "order": 20,
+  "detect": [
+    "docker"
+  ],
+  "sections": [
+    {
+      "title": "Containers — running",
+      "entries": [
+        {
+          "keys": "docker ps",
+          "desc": "List running containers"
+        },
+        {
+          "keys": "docker ps -a",
+          "desc": "List every container, stopped ones included"
+        },
+        {
+          "keys": "docker run IMAGE",
+          "desc": "Create and start a container from an image"
+        },
+        {
+          "keys": "docker run -it IMAGE sh",
+          "desc": "Run interactively with a shell attached"
+        },
+        {
+          "keys": "docker run -d IMAGE",
+          "desc": "Run detached, in the background"
+        },
+        {
+          "keys": "docker run --rm IMAGE",
+          "desc": "Delete the container as soon as it exits"
+        },
+        {
+          "keys": "docker run -p 8080:80 IMAGE",
+          "desc": "Publish host port 8080 to container port 80"
+        },
+        {
+          "keys": "docker run -v $PWD:/app IMAGE",
+          "desc": "Bind-mount the current directory into /app"
+        },
+        {
+          "keys": "docker run -e KEY=value IMAGE",
+          "desc": "Set an environment variable"
+        },
+        {
+          "keys": "docker run --name mybox IMAGE",
+          "desc": "Give the container a name"
+        }
+      ]
+    },
+    {
+      "title": "Containers — managing",
+      "entries": [
+        {
+          "keys": "docker start|stop|restart NAME",
+          "desc": "Start, stop, or restart a container"
+        },
+        {
+          "keys": "docker exec -it NAME bash",
+          "desc": "Open a shell inside a running container"
+        },
+        {
+          "keys": "docker attach NAME",
+          "desc": "Attach to the container's main process"
+        },
+        {
+          "keys": "docker logs -f NAME",
+          "desc": "Follow a container's logs"
+        },
+        {
+          "keys": "docker logs --tail 100 NAME",
+          "desc": "Show the last 100 log lines"
+        },
+        {
+          "keys": "docker inspect NAME",
+          "desc": "Dump the full config and state as JSON"
+        },
+        {
+          "keys": "docker stats",
+          "desc": "Live CPU, memory, and network usage per container"
+        },
+        {
+          "keys": "docker top NAME",
+          "desc": "List processes running inside a container"
+        },
+        {
+          "keys": "docker cp NAME:/path ./local",
+          "desc": "Copy files out of (or into) a container"
+        },
+        {
+          "keys": "docker rm NAME",
+          "desc": "Remove a stopped container"
+        },
+        {
+          "keys": "docker rm -f NAME",
+          "desc": "Force-remove a running container"
+        },
+        {
+          "keys": "docker port NAME",
+          "desc": "Show the container's port mappings"
+        }
+      ]
+    },
+    {
+      "title": "Images",
+      "entries": [
+        {
+          "keys": "docker images",
+          "desc": "List local images"
+        },
+        {
+          "keys": "docker pull IMAGE:TAG",
+          "desc": "Download an image from a registry"
+        },
+        {
+          "keys": "docker push IMAGE:TAG",
+          "desc": "Upload an image to a registry"
+        },
+        {
+          "keys": "docker build -t name:tag .",
+          "desc": "Build an image from the Dockerfile here"
+        },
+        {
+          "keys": "docker build --no-cache .",
+          "desc": "Build ignoring every cached layer"
+        },
+        {
+          "keys": "docker build -f path/Dockerfile .",
+          "desc": "Build using a Dockerfile elsewhere"
+        },
+        {
+          "keys": "docker tag SRC TARGET",
+          "desc": "Add another name to an existing image"
+        },
+        {
+          "keys": "docker rmi IMAGE",
+          "desc": "Delete an image"
+        },
+        {
+          "keys": "docker history IMAGE",
+          "desc": "Show the layers an image is built from"
+        },
+        {
+          "keys": "docker save -o out.tar IMAGE",
+          "desc": "Export an image to a tar file"
+        },
+        {
+          "keys": "docker load -i out.tar",
+          "desc": "Import an image from a tar file"
+        }
+      ]
+    },
+    {
+      "title": "Volumes and networks",
+      "entries": [
+        {
+          "keys": "docker volume ls",
+          "desc": "List volumes"
+        },
+        {
+          "keys": "docker volume create NAME",
+          "desc": "Create a named volume"
+        },
+        {
+          "keys": "docker volume inspect NAME",
+          "desc": "Show a volume's mountpoint and options"
+        },
+        {
+          "keys": "docker volume rm NAME",
+          "desc": "Delete a volume"
+        },
+        {
+          "keys": "docker network ls",
+          "desc": "List networks"
+        },
+        {
+          "keys": "docker network create NAME",
+          "desc": "Create a bridge network"
+        },
+        {
+          "keys": "docker network connect NET BOX",
+          "desc": "Attach a container to a network"
+        },
+        {
+          "keys": "docker network inspect NET",
+          "desc": "Show which containers are on a network"
+        }
+      ]
+    },
+    {
+      "title": "Cleaning up",
+      "entries": [
+        {
+          "keys": "docker system df",
+          "desc": "Show how much disk Docker is using"
+        },
+        {
+          "keys": "docker system prune",
+          "desc": "Remove stopped containers, unused networks, dangling images"
+        },
+        {
+          "keys": "docker system prune -a --volumes",
+          "desc": "Aggressive cleanup — also unused images and volumes"
+        },
+        {
+          "keys": "docker container prune",
+          "desc": "Remove all stopped containers"
+        },
+        {
+          "keys": "docker image prune -a",
+          "desc": "Remove every image not used by a container"
+        },
+        {
+          "keys": "docker volume prune",
+          "desc": "Remove unused volumes"
+        },
+        {
+          "keys": "docker builder prune",
+          "desc": "Clear the build cache"
+        }
+      ]
+    },
+    {
+      "title": "Handy one-liners",
+      "entries": [
+        {
+          "keys": "docker stop $(docker ps -q)",
+          "desc": "Stop every running container"
+        },
+        {
+          "keys": "docker rm $(docker ps -aq)",
+          "desc": "Remove every container"
+        },
+        {
+          "keys": "docker rmi $(docker images -q)",
+          "desc": "Remove every image"
+        },
+        {
+          "keys": "docker ps --format '{{.Names}}'",
+          "desc": "Print just the container names"
+        },
+        {
+          "keys": "docker exec -it NAME env",
+          "desc": "Show a running container's environment"
+        }
+      ]
+    }
+  ]
+}

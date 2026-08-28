@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+#
+# Collect every cheatsheet into one JSON array on stdout.
+#
+# QML's FileView reads a single path and cannot glob a directory, so all of the
+# I/O for this plugin happens here, once per open: read the bundled sheets, read
+# the user's own, hide the ones whose tool isn't installed, run any generators,
+# and merge. The overlay just parses the result.
+#
+# Usage: cheatsheets-load [--all] [--plugin-dir DIR]
+#   --all          keep sheets whose `detect` binaries are missing
+#   --plugin-dir   where the plugin lives (defaults to this script's parent)
+
+set -o pipefail
+
+command -v jq >/dev/null 2>&1 || {
+  echo "cheatsheets-load: jq is required" >&2
+  exit 1
+}
+
+plugin_dir=""
+show_all=0
+
+while (($# > 0)); do
+  case "$1" in
+  --all)
+    show_all=1
+    shift
+    ;;
+  --plugin-dir)
+    plugin_dir="$2"
+    shift 2
+    ;;
+  -h | --help)
+    sed -n '3,13p' "$0"
+    exit 0
+    ;;
+  *)
+    echo "cheatsheets-load: unknown option: $1" >&2
+    exit 1
+    ;;
+  esac
+done
+
+if [[ -z $plugin_dir ]]; then
+  plugin_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+fi
+
+bundled_dir="$plugin_dir/data"
+user_dir="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/cheatsheets"
+
+# A sheet is shown when any one of its `detect` binaries is on PATH. No detect
+# list at all means "always show" — that is what a sheet for something without a
+# command of its own (a web app, a hardware device) needs.
+tool_present() {
+  local sheet="$1" binary
+  local -a binaries
+
+  mapfile -t binaries < <(jq -r '(.detect // [])[]' "$sheet" 2>/dev/null)
+  ((${#binaries[@]} == 0)) && return 0
+
+  for binary in "${binaries[@]}"; do
+    [[ -n $binary ]] || continue
+    command -v -- "$binary" >/dev/null 2>&1 && return 0
+  done
+  return 1
+}
+
+# Generators let a sheet be built from the live system instead of a static table
+# (see bin/gen-hyprland). They are only ever looked up inside the plugin's own
+# bin/ directory: a sheet dropped into the user config directory naming a
+# generator gets its static sections, never an arbitrary path off disk.
+generated_sections() {
+  local sheet="$1" name script
+
+  name=$(jq -r '.generator // ""' "$sheet" 2>/dev/null)
+  [[ -n $name ]] || return 1
+  [[ $name != */* && $name != *".."* ]] || return 1
+
+  script="$plugin_dir/bin/$name"
+  [[ -f $script && -x $script ]] || return 1
+
+  local out
+  out=$("$script" 2>/dev/null) || return 1
+  [[ -n $out ]] || return 1
+  jq -e 'type == "array" and length > 0' <<<"$out" >/dev/null 2>&1 || return 1
+
+  printf '%s' "$out"
+}
+
+emit_sheet() {
+  local sheet="$1" origin="$2" sections
+
+  jq -e 'type == "object" and (.id // "") != ""' "$sheet" >/dev/null 2>&1 || {
+    echo "cheatsheets-load: skipping malformed sheet: $sheet" >&2
+    return
+  }
+
+  if ((!show_all)) && ! tool_present "$sheet"; then
+    return
+  fi
+
+  if [[ $origin == bundled ]] && sections=$(generated_sections "$sheet"); then
+    jq --argjson sections "$sections" --arg origin "$origin" \
+      '.sections = $sections | .origin = $origin' "$sheet"
+  else
+    jq --arg origin "$origin" '.origin = $origin' "$sheet"
+  fi
+}
+
+{
+  shopt -s nullglob
+  for sheet in "$bundled_dir"/*.json; do emit_sheet "$sheet" bundled; done
+  for sheet in "$user_dir"/*.json; do emit_sheet "$sheet" user; done
+} | jq -s '
+  # Later sheets win, so a user file reusing a bundled id replaces it outright
+  # rather than appearing twice.
+  reduce .[] as $sheet ({ seen: [], byId: {} };
+    .seen = (if .byId[$sheet.id] then .seen else .seen + [$sheet.id] end)
+    | .byId[$sheet.id] = $sheet)
+  | [ .seen[] as $id | .byId[$id] ]
+  # `order` sets the tab order. Sheets without one sort to the end alphabetically,
+  # which is where a user sheet that did not ask for a position belongs.
+  | sort_by([ (.order // 10000), (.name // .id) ])
+  | map({
+      id,
+      name: (.name // .id),
+      icon: (.icon // ""),
+      note: (.note // ""),
+      origin,
+      windowClasses: (.windowClasses // []),
+      sections: [ (.sections // [])[]
+        | { title: (.title // ""),
+            entries: [ (.entries // [])[]
+              | select((.keys // "") != "" or (.desc // "") != "")
+              | { keys: (.keys // ""), desc: (.desc // "") } ] }
+        | select(.entries | length > 0) ]
+    })
+  | map(select(.sections | length > 0))
+'

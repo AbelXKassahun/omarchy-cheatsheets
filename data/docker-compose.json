@@ -1,0 +1,157 @@
+{
+  "id": "docker-compose",
+  "name": "Compose",
+  "icon": "",
+  "order": 30,
+  "detect": [
+    "docker"
+  ],
+  "note": "Modern Docker ships Compose as a subcommand: `docker compose`. The standalone `docker-compose` binary takes the same arguments.",
+  "sections": [
+    {
+      "title": "Bringing things up and down",
+      "entries": [
+        {
+          "keys": "docker compose up",
+          "desc": "Start every service, logs in the foreground"
+        },
+        {
+          "keys": "docker compose up -d",
+          "desc": "Start every service in the background"
+        },
+        {
+          "keys": "docker compose up --build",
+          "desc": "Rebuild images before starting"
+        },
+        {
+          "keys": "docker compose up -d SERVICE",
+          "desc": "Start just one service and its dependencies"
+        },
+        {
+          "keys": "docker compose down",
+          "desc": "Stop and remove containers and networks"
+        },
+        {
+          "keys": "docker compose down -v",
+          "desc": "Also delete the named volumes — destroys data"
+        },
+        {
+          "keys": "docker compose down --rmi all",
+          "desc": "Also delete the images that were built"
+        },
+        {
+          "keys": "docker compose stop | start",
+          "desc": "Stop or start without removing anything"
+        },
+        {
+          "keys": "docker compose restart SERVICE",
+          "desc": "Restart one service"
+        }
+      ]
+    },
+    {
+      "title": "Looking at what's running",
+      "entries": [
+        {
+          "keys": "docker compose ps",
+          "desc": "List the services in this project"
+        },
+        {
+          "keys": "docker compose logs -f",
+          "desc": "Follow logs from every service"
+        },
+        {
+          "keys": "docker compose logs -f SERVICE",
+          "desc": "Follow one service's logs"
+        },
+        {
+          "keys": "docker compose logs --tail 50",
+          "desc": "Show the last 50 lines"
+        },
+        {
+          "keys": "docker compose top",
+          "desc": "Processes running in each service"
+        },
+        {
+          "keys": "docker compose events",
+          "desc": "Stream container events as they happen"
+        }
+      ]
+    },
+    {
+      "title": "Running commands",
+      "entries": [
+        {
+          "keys": "docker compose exec SERVICE bash",
+          "desc": "Shell into an already-running service"
+        },
+        {
+          "keys": "docker compose run --rm SERVICE cmd",
+          "desc": "Run a one-off command in a fresh container"
+        },
+        {
+          "keys": "docker compose run --rm -p 3000:3000 web",
+          "desc": "One-off run with ports published"
+        },
+        {
+          "keys": "docker compose build SERVICE",
+          "desc": "Build (or rebuild) one service's image"
+        },
+        {
+          "keys": "docker compose pull",
+          "desc": "Pull the latest images for every service"
+        }
+      ]
+    },
+    {
+      "title": "Config and files",
+      "entries": [
+        {
+          "keys": "docker compose config",
+          "desc": "Print the fully resolved config — great for debugging"
+        },
+        {
+          "keys": "docker compose -f other.yml up",
+          "desc": "Use a different compose file"
+        },
+        {
+          "keys": "docker compose -f a.yml -f b.yml up",
+          "desc": "Layer a second file over the first"
+        },
+        {
+          "keys": "docker compose -p name up",
+          "desc": "Override the project name"
+        },
+        {
+          "keys": "docker compose --env-file .env.prod up",
+          "desc": "Use a specific env file"
+        },
+        {
+          "keys": "docker compose --profile debug up",
+          "desc": "Include services behind a profile"
+        }
+      ]
+    },
+    {
+      "title": "Scaling and waiting",
+      "entries": [
+        {
+          "keys": "docker compose up -d --scale web=3",
+          "desc": "Run three copies of a service"
+        },
+        {
+          "keys": "docker compose up --wait",
+          "desc": "Block until services report healthy"
+        },
+        {
+          "keys": "docker compose up --force-recreate",
+          "desc": "Recreate containers even if nothing changed"
+        },
+        {
+          "keys": "docker compose up --no-deps SERVICE",
+          "desc": "Start a service without its dependencies"
+        }
+      ]
+    }
+  ]
+}

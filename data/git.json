@@ -1,0 +1,253 @@
+{
+  "id": "git",
+  "name": "Git",
+  "icon": "",
+  "order": 60,
+  "detect": [
+    "git"
+  ],
+  "sections": [
+    {
+      "title": "Where am I",
+      "entries": [
+        {
+          "keys": "git status",
+          "desc": "What's changed, staged, and untracked"
+        },
+        {
+          "keys": "git status -sb",
+          "desc": "The short version, with branch info"
+        },
+        {
+          "keys": "git diff",
+          "desc": "Unstaged changes"
+        },
+        {
+          "keys": "git diff --staged",
+          "desc": "Changes that are staged for the next commit"
+        },
+        {
+          "keys": "git log --oneline --graph --all",
+          "desc": "The whole history as a graph"
+        },
+        {
+          "keys": "git log -p FILE",
+          "desc": "History of one file, with diffs"
+        },
+        {
+          "keys": "git blame FILE",
+          "desc": "Who last touched each line"
+        },
+        {
+          "keys": "git show COMMIT",
+          "desc": "Everything about one commit"
+        }
+      ]
+    },
+    {
+      "title": "Committing",
+      "entries": [
+        {
+          "keys": "git add FILE",
+          "desc": "Stage a file"
+        },
+        {
+          "keys": "git add -p",
+          "desc": "Stage hunk by hunk, interactively"
+        },
+        {
+          "keys": "git add -A",
+          "desc": "Stage everything, deletions included"
+        },
+        {
+          "keys": "git commit -m \"msg\"",
+          "desc": "Commit what's staged"
+        },
+        {
+          "keys": "git commit -am \"msg\"",
+          "desc": "Stage tracked files and commit in one go"
+        },
+        {
+          "keys": "git commit --amend",
+          "desc": "Rewrite the last commit"
+        },
+        {
+          "keys": "git commit --amend --no-edit",
+          "desc": "Add to the last commit, keep its message"
+        },
+        {
+          "keys": "git restore FILE",
+          "desc": "Throw away unstaged changes to a file"
+        },
+        {
+          "keys": "git restore --staged FILE",
+          "desc": "Unstage a file, keep the changes"
+        }
+      ]
+    },
+    {
+      "title": "Branches",
+      "entries": [
+        {
+          "keys": "git branch",
+          "desc": "List local branches"
+        },
+        {
+          "keys": "git branch -a",
+          "desc": "List local and remote branches"
+        },
+        {
+          "keys": "git switch BRANCH",
+          "desc": "Switch to an existing branch"
+        },
+        {
+          "keys": "git switch -c BRANCH",
+          "desc": "Create a branch and switch to it"
+        },
+        {
+          "keys": "git switch -",
+          "desc": "Switch back to the previous branch"
+        },
+        {
+          "keys": "git branch -d BRANCH",
+          "desc": "Delete a merged branch"
+        },
+        {
+          "keys": "git branch -D BRANCH",
+          "desc": "Force-delete a branch"
+        },
+        {
+          "keys": "git branch -m NEW",
+          "desc": "Rename the current branch"
+        },
+        {
+          "keys": "git merge BRANCH",
+          "desc": "Merge a branch into this one"
+        },
+        {
+          "keys": "git rebase BRANCH",
+          "desc": "Replay your commits on top of another branch"
+        },
+        {
+          "keys": "git rebase -i HEAD~5",
+          "desc": "Interactively rework the last 5 commits"
+        }
+      ]
+    },
+    {
+      "title": "Remotes",
+      "entries": [
+        {
+          "keys": "git clone URL",
+          "desc": "Clone a repository"
+        },
+        {
+          "keys": "git fetch",
+          "desc": "Download remote changes without merging"
+        },
+        {
+          "keys": "git pull",
+          "desc": "Fetch and merge"
+        },
+        {
+          "keys": "git pull --rebase",
+          "desc": "Fetch and rebase your work on top"
+        },
+        {
+          "keys": "git push",
+          "desc": "Push the current branch"
+        },
+        {
+          "keys": "git push -u origin BRANCH",
+          "desc": "Push and set the upstream"
+        },
+        {
+          "keys": "git push --force-with-lease",
+          "desc": "Force push, but safely — refuses if someone else pushed"
+        },
+        {
+          "keys": "git remote -v",
+          "desc": "List remotes"
+        },
+        {
+          "keys": "git remote add NAME URL",
+          "desc": "Add a remote"
+        }
+      ]
+    },
+    {
+      "title": "Undoing things",
+      "entries": [
+        {
+          "keys": "git reset --soft HEAD~1",
+          "desc": "Undo the last commit, keep changes staged"
+        },
+        {
+          "keys": "git reset HEAD~1",
+          "desc": "Undo the last commit, keep changes unstaged"
+        },
+        {
+          "keys": "git reset --hard HEAD~1",
+          "desc": "Undo the last commit and discard the changes"
+        },
+        {
+          "keys": "git revert COMMIT",
+          "desc": "Make a new commit that undoes an old one"
+        },
+        {
+          "keys": "git reflog",
+          "desc": "Every HEAD move — how you recover 'lost' commits"
+        },
+        {
+          "keys": "git restore --source=COMMIT FILE",
+          "desc": "Restore a file as it was at some commit"
+        },
+        {
+          "keys": "git clean -fd",
+          "desc": "Delete untracked files and directories"
+        },
+        {
+          "keys": "git clean -nd",
+          "desc": "Dry run — show what clean would delete"
+        }
+      ]
+    },
+    {
+      "title": "Stash, worktrees, bisect",
+      "entries": [
+        {
+          "keys": "git stash",
+          "desc": "Shelve your changes"
+        },
+        {
+          "keys": "git stash -u",
+          "desc": "Shelve untracked files too"
+        },
+        {
+          "keys": "git stash pop",
+          "desc": "Bring the last stash back and drop it"
+        },
+        {
+          "keys": "git stash list",
+          "desc": "List stashes"
+        },
+        {
+          "keys": "git worktree add ../dir BRANCH",
+          "desc": "Check out a branch in a second directory"
+        },
+        {
+          "keys": "git worktree list",
+          "desc": "List worktrees"
+        },
+        {
+          "keys": "git cherry-pick COMMIT",
+          "desc": "Apply one commit from elsewhere"
+        },
+        {
+          "keys": "git bisect start / bad / good",
+          "desc": "Binary-search history for the commit that broke it"
+        }
+      ]
+    }
+  ]
+}

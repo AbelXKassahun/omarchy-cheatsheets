@@ -1,0 +1,205 @@
+{
+  "id": "ssh",
+  "name": "SSH",
+  "icon": "",
+  "order": 90,
+  "detect": [
+    "ssh"
+  ],
+  "sections": [
+    {
+      "title": "Connecting",
+      "entries": [
+        {
+          "keys": "ssh user@host",
+          "desc": "Connect"
+        },
+        {
+          "keys": "ssh -p 2222 user@host",
+          "desc": "Connect on a non-standard port"
+        },
+        {
+          "keys": "ssh -i ~/.ssh/key user@host",
+          "desc": "Use a specific private key"
+        },
+        {
+          "keys": "ssh user@host 'command'",
+          "desc": "Run one command and exit"
+        },
+        {
+          "keys": "ssh -v user@host",
+          "desc": "Verbose — the first thing to try when auth fails"
+        },
+        {
+          "keys": "ssh -A user@host",
+          "desc": "Forward your agent so the remote can use your keys"
+        },
+        {
+          "keys": "ssh -J jump@host target",
+          "desc": "Hop through a bastion / jump host"
+        },
+        {
+          "keys": "ssh -X user@host",
+          "desc": "Forward X11 for graphical apps"
+        }
+      ]
+    },
+    {
+      "title": "The escape sequence",
+      "entries": [
+        {
+          "keys": "~.",
+          "desc": "Kill a hung session — type it at the start of a line"
+        },
+        {
+          "keys": "~?",
+          "desc": "List every escape sequence"
+        },
+        {
+          "keys": "~C",
+          "desc": "Open the ssh command line (add port forwards mid-session)"
+        },
+        {
+          "keys": "~^Z",
+          "desc": "Background the ssh session"
+        },
+        {
+          "keys": "~#",
+          "desc": "List forwarded connections"
+        }
+      ]
+    },
+    {
+      "title": "Port forwarding",
+      "entries": [
+        {
+          "keys": "ssh -L 8080:localhost:80 host",
+          "desc": "Local: your :8080 reaches the remote's :80"
+        },
+        {
+          "keys": "ssh -R 8080:localhost:3000 host",
+          "desc": "Remote: their :8080 reaches your local :3000"
+        },
+        {
+          "keys": "ssh -D 1080 host",
+          "desc": "SOCKS proxy on local :1080, tunnelled through the host"
+        },
+        {
+          "keys": "ssh -N -f -L ...",
+          "desc": "Set up the tunnel only, in the background, no shell"
+        }
+      ]
+    },
+    {
+      "title": "Keys",
+      "entries": [
+        {
+          "keys": "ssh-keygen -t ed25519 -C \"comment\"",
+          "desc": "Generate a modern key pair"
+        },
+        {
+          "keys": "ssh-copy-id user@host",
+          "desc": "Install your public key on a server"
+        },
+        {
+          "keys": "ssh-add ~/.ssh/key",
+          "desc": "Add a key to the running agent"
+        },
+        {
+          "keys": "ssh-add -l",
+          "desc": "List keys the agent is holding"
+        },
+        {
+          "keys": "ssh-add -D",
+          "desc": "Forget every key"
+        },
+        {
+          "keys": "ssh-keygen -p -f ~/.ssh/key",
+          "desc": "Change a key's passphrase"
+        },
+        {
+          "keys": "ssh-keygen -lf ~/.ssh/key.pub",
+          "desc": "Show a key's fingerprint"
+        },
+        {
+          "keys": "ssh-keyscan host >> ~/.ssh/known_hosts",
+          "desc": "Pre-trust a host key"
+        },
+        {
+          "keys": "ssh-keygen -R host",
+          "desc": "Remove a stale host key after a rebuild"
+        }
+      ]
+    },
+    {
+      "title": "~/.ssh/config",
+      "entries": [
+        {
+          "keys": "Host myserver",
+          "desc": "The alias you'll type: ssh myserver"
+        },
+        {
+          "keys": "  HostName 1.2.3.4",
+          "desc": "The real address"
+        },
+        {
+          "keys": "  User deploy",
+          "desc": "Username to log in as"
+        },
+        {
+          "keys": "  Port 2222",
+          "desc": "Non-standard port"
+        },
+        {
+          "keys": "  IdentityFile ~/.ssh/key",
+          "desc": "Which key to offer"
+        },
+        {
+          "keys": "  ProxyJump bastion",
+          "desc": "Always hop through this host"
+        },
+        {
+          "keys": "  ForwardAgent yes",
+          "desc": "Forward the agent to this host"
+        },
+        {
+          "keys": "  ServerAliveInterval 60",
+          "desc": "Ping every 60s so the connection doesn't drop"
+        },
+        {
+          "keys": "  ControlMaster auto",
+          "desc": "Reuse one connection for every session — much faster"
+        }
+      ]
+    },
+    {
+      "title": "Copying files",
+      "entries": [
+        {
+          "keys": "scp file user@host:/path",
+          "desc": "Copy a file up"
+        },
+        {
+          "keys": "scp user@host:/path ./",
+          "desc": "Copy a file down"
+        },
+        {
+          "keys": "scp -r dir user@host:/path",
+          "desc": "Copy a directory"
+        },
+        {
+          "keys": "rsync -avP src/ user@host:/dst/",
+          "desc": "Sync a directory, resumable, with progress"
+        },
+        {
+          "keys": "rsync -avzP --delete src/ host:/dst/",
+          "desc": "Mirror exactly, deleting extras on the far end"
+        },
+        {
+          "keys": "sftp user@host",
+          "desc": "Interactive file transfer session"
+        }
+      ]
+    }
+  ]
+}

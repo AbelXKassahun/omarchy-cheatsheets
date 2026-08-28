@@ -1,0 +1,288 @@
+{
+  "id": "tmux",
+  "name": "tmux",
+  "icon": "",
+  "order": 10,
+  "detect": [
+    "tmux"
+  ],
+  "windowClasses": [
+    "Alacritty",
+    "foot",
+    "kitty",
+    "com.mitchellh.ghostty"
+  ],
+  "note": "Written against ~/.config/tmux/tmux.conf (Omarchy defaults). Prefix is Ctrl+Space, with Ctrl+b kept as a second prefix.",
+  "sections": [
+    {
+      "title": "Prefix",
+      "entries": [
+        {
+          "keys": "C-Space",
+          "desc": "Prefix (primary)"
+        },
+        {
+          "keys": "C-b",
+          "desc": "Prefix (secondary, still works)"
+        },
+        {
+          "keys": "Prefix C-Space",
+          "desc": "Send a literal prefix to the program inside"
+        },
+        {
+          "keys": "Prefix q",
+          "desc": "Reload ~/.config/tmux/tmux.conf"
+        }
+      ]
+    },
+    {
+      "title": "Panes — no prefix needed",
+      "entries": [
+        {
+          "keys": "M-Enter",
+          "desc": "Split pane horizontally (new pane below)"
+        },
+        {
+          "keys": "M-S-Enter",
+          "desc": "Split pane vertically (new pane right)"
+        },
+        {
+          "keys": "M-Escape",
+          "desc": "Kill the current pane"
+        },
+        {
+          "keys": "C-M-Left/Right/Up/Down",
+          "desc": "Move focus between panes"
+        },
+        {
+          "keys": "C-M-S-Left/Right/Up/Down",
+          "desc": "Resize the current pane by 5"
+        }
+      ]
+    },
+    {
+      "title": "Panes — with prefix",
+      "entries": [
+        {
+          "keys": "Prefix h",
+          "desc": "Split horizontally (pane below)"
+        },
+        {
+          "keys": "Prefix v",
+          "desc": "Split vertically (pane right)"
+        },
+        {
+          "keys": "Prefix x",
+          "desc": "Kill the current pane"
+        },
+        {
+          "keys": "Prefix z",
+          "desc": "Zoom / unzoom the current pane"
+        },
+        {
+          "keys": "Prefix {  /  }",
+          "desc": "Swap pane with the previous / next one"
+        },
+        {
+          "keys": "Prefix Space",
+          "desc": "Cycle through pane layouts"
+        },
+        {
+          "keys": "Prefix !",
+          "desc": "Break the current pane out into its own window"
+        },
+        {
+          "keys": "Prefix q",
+          "desc": "Show pane numbers (also reloads config here)"
+        }
+      ]
+    },
+    {
+      "title": "Windows — no prefix needed",
+      "entries": [
+        {
+          "keys": "M-1 … M-9",
+          "desc": "Jump straight to window 1–9"
+        },
+        {
+          "keys": "M-Left / M-Right",
+          "desc": "Previous / next window"
+        },
+        {
+          "keys": "M-S-Left / M-S-Right",
+          "desc": "Move the current window left / right"
+        }
+      ]
+    },
+    {
+      "title": "Windows — with prefix",
+      "entries": [
+        {
+          "keys": "Prefix c",
+          "desc": "New window in the current directory"
+        },
+        {
+          "keys": "Prefix k",
+          "desc": "Kill the current window"
+        },
+        {
+          "keys": "Prefix r",
+          "desc": "Rename the current window"
+        },
+        {
+          "keys": "Prefix w",
+          "desc": "Pick a window from an interactive list"
+        },
+        {
+          "keys": "Prefix ,",
+          "desc": "Rename window (tmux default, also active)"
+        }
+      ]
+    },
+    {
+      "title": "Sessions — no prefix needed",
+      "entries": [
+        {
+          "keys": "M-Up",
+          "desc": "Previous session"
+        },
+        {
+          "keys": "M-Down",
+          "desc": "Next session"
+        }
+      ]
+    },
+    {
+      "title": "Sessions — with prefix",
+      "entries": [
+        {
+          "keys": "Prefix C",
+          "desc": "New session in the current directory"
+        },
+        {
+          "keys": "Prefix K",
+          "desc": "Kill the current session"
+        },
+        {
+          "keys": "Prefix R",
+          "desc": "Rename the current session"
+        },
+        {
+          "keys": "Prefix P  /  Prefix N",
+          "desc": "Previous / next session"
+        },
+        {
+          "keys": "Prefix d",
+          "desc": "Detach from the session (leaves it running)"
+        },
+        {
+          "keys": "Prefix s",
+          "desc": "Pick a session from an interactive list"
+        },
+        {
+          "keys": "Prefix $",
+          "desc": "Rename session (tmux default, also active)"
+        }
+      ]
+    },
+    {
+      "title": "Copy mode (vi keys)",
+      "entries": [
+        {
+          "keys": "Prefix [",
+          "desc": "Enter copy mode — scroll back through output"
+        },
+        {
+          "keys": "v",
+          "desc": "Start selecting (in copy mode)"
+        },
+        {
+          "keys": "y",
+          "desc": "Yank the selection and leave copy mode"
+        },
+        {
+          "keys": "/  ?",
+          "desc": "Search forward / backward (in copy mode)"
+        },
+        {
+          "keys": "n  N",
+          "desc": "Next / previous search match"
+        },
+        {
+          "keys": "g  G",
+          "desc": "Jump to top / bottom of the scrollback"
+        },
+        {
+          "keys": "C-u  C-d",
+          "desc": "Half page up / down"
+        },
+        {
+          "keys": "q  or  Escape",
+          "desc": "Leave copy mode"
+        },
+        {
+          "keys": "Prefix ]",
+          "desc": "Paste the tmux buffer"
+        }
+      ]
+    },
+    {
+      "title": "From the shell",
+      "entries": [
+        {
+          "keys": "tmux",
+          "desc": "Start a new unnamed session"
+        },
+        {
+          "keys": "tmux new -s name",
+          "desc": "Start a new named session"
+        },
+        {
+          "keys": "tmux ls",
+          "desc": "List running sessions"
+        },
+        {
+          "keys": "tmux a",
+          "desc": "Attach to the most recent session"
+        },
+        {
+          "keys": "tmux a -t name",
+          "desc": "Attach to a specific session"
+        },
+        {
+          "keys": "tmux kill-session -t name",
+          "desc": "Kill one session"
+        },
+        {
+          "keys": "tmux kill-server",
+          "desc": "Kill every session and the server"
+        },
+        {
+          "keys": "tdl [agent]",
+          "desc": "Omarchy: three-way dev layout — editor, agent, terminal"
+        }
+      ]
+    },
+    {
+      "title": "Good to know",
+      "entries": [
+        {
+          "keys": "mouse",
+          "desc": "Mouse mode is on — click panes, drag borders, scroll to page back"
+        },
+        {
+          "keys": "base-index 1",
+          "desc": "Windows and panes are numbered from 1, not 0"
+        },
+        {
+          "keys": "detach-on-destroy off",
+          "desc": "Killing the last window drops you to another session, not the shell"
+        },
+        {
+          "keys": "status-position top",
+          "desc": "The status bar sits at the top of the terminal"
+        }
+      ]
+    }
+  ]
+}

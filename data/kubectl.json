@@ -1,0 +1,200 @@
+{
+  "id": "kubectl",
+  "name": "kubectl",
+  "icon": "󱃾",
+  "order": 80,
+  "detect": [
+    "kubectl"
+  ],
+  "sections": [
+    {
+      "title": "Context and namespace",
+      "entries": [
+        {
+          "keys": "kubectl config get-contexts",
+          "desc": "List the clusters you can talk to"
+        },
+        {
+          "keys": "kubectl config current-context",
+          "desc": "Which cluster am I pointed at"
+        },
+        {
+          "keys": "kubectl config use-context NAME",
+          "desc": "Switch cluster"
+        },
+        {
+          "keys": "kubectl config set-context --current --namespace=NS",
+          "desc": "Change the default namespace"
+        },
+        {
+          "keys": "kubectl -n NS ...",
+          "desc": "Run one command against another namespace"
+        },
+        {
+          "keys": "kubectl get ns",
+          "desc": "List namespaces"
+        }
+      ]
+    },
+    {
+      "title": "Looking around",
+      "entries": [
+        {
+          "keys": "kubectl get pods",
+          "desc": "List pods in the current namespace"
+        },
+        {
+          "keys": "kubectl get pods -A",
+          "desc": "List pods across every namespace"
+        },
+        {
+          "keys": "kubectl get pods -o wide",
+          "desc": "Include node and IP columns"
+        },
+        {
+          "keys": "kubectl get pods -w",
+          "desc": "Watch pods change in real time"
+        },
+        {
+          "keys": "kubectl get all",
+          "desc": "Pods, services, deployments, replicasets"
+        },
+        {
+          "keys": "kubectl describe pod NAME",
+          "desc": "Full detail plus recent events — first stop when debugging"
+        },
+        {
+          "keys": "kubectl get events --sort-by=.lastTimestamp",
+          "desc": "Recent cluster events, newest last"
+        },
+        {
+          "keys": "kubectl get NAME -o yaml",
+          "desc": "Dump a resource as YAML"
+        },
+        {
+          "keys": "kubectl api-resources",
+          "desc": "Every resource type and its short name"
+        }
+      ]
+    },
+    {
+      "title": "Logs and shells",
+      "entries": [
+        {
+          "keys": "kubectl logs POD",
+          "desc": "Print a pod's logs"
+        },
+        {
+          "keys": "kubectl logs -f POD",
+          "desc": "Follow the logs"
+        },
+        {
+          "keys": "kubectl logs POD -c CONTAINER",
+          "desc": "Logs from one container in a multi-container pod"
+        },
+        {
+          "keys": "kubectl logs POD --previous",
+          "desc": "Logs from the crashed previous instance"
+        },
+        {
+          "keys": "kubectl logs -l app=web --tail=50",
+          "desc": "Logs from every pod matching a label"
+        },
+        {
+          "keys": "kubectl exec -it POD -- bash",
+          "desc": "Shell into a pod"
+        },
+        {
+          "keys": "kubectl port-forward POD 8080:80",
+          "desc": "Forward a local port into the cluster"
+        },
+        {
+          "keys": "kubectl port-forward svc/NAME 8080:80",
+          "desc": "Forward to a service instead"
+        },
+        {
+          "keys": "kubectl cp POD:/path ./local",
+          "desc": "Copy a file out of a pod"
+        }
+      ]
+    },
+    {
+      "title": "Applying and changing",
+      "entries": [
+        {
+          "keys": "kubectl apply -f file.yaml",
+          "desc": "Create or update from a manifest"
+        },
+        {
+          "keys": "kubectl apply -f ./dir",
+          "desc": "Apply every manifest in a directory"
+        },
+        {
+          "keys": "kubectl delete -f file.yaml",
+          "desc": "Delete what the manifest describes"
+        },
+        {
+          "keys": "kubectl delete pod NAME",
+          "desc": "Delete a pod (a deployment will recreate it)"
+        },
+        {
+          "keys": "kubectl edit deploy NAME",
+          "desc": "Open the live resource in your editor"
+        },
+        {
+          "keys": "kubectl scale deploy NAME --replicas=3",
+          "desc": "Change the replica count"
+        },
+        {
+          "keys": "kubectl rollout restart deploy NAME",
+          "desc": "Roll every pod, keeping the config"
+        },
+        {
+          "keys": "kubectl rollout status deploy NAME",
+          "desc": "Watch a rollout finish"
+        },
+        {
+          "keys": "kubectl rollout undo deploy NAME",
+          "desc": "Roll back to the previous revision"
+        },
+        {
+          "keys": "kubectl diff -f file.yaml",
+          "desc": "Show what applying would change"
+        }
+      ]
+    },
+    {
+      "title": "Debugging",
+      "entries": [
+        {
+          "keys": "kubectl top pods",
+          "desc": "CPU and memory per pod"
+        },
+        {
+          "keys": "kubectl top nodes",
+          "desc": "CPU and memory per node"
+        },
+        {
+          "keys": "kubectl get pods --field-selector=status.phase!=Running",
+          "desc": "Show only unhealthy pods"
+        },
+        {
+          "keys": "kubectl run tmp --rm -it --image=busybox -- sh",
+          "desc": "Throwaway pod for poking at the network"
+        },
+        {
+          "keys": "kubectl debug POD -it --image=busybox",
+          "desc": "Attach a debug container to a running pod"
+        },
+        {
+          "keys": "kubectl get pod NAME -o jsonpath='{.status}'",
+          "desc": "Pull one field out with jsonpath"
+        },
+        {
+          "keys": "kubectl explain pod.spec",
+          "desc": "Built-in docs for any field of any resource"
+        }
+      ]
+    }
+  ]
+}

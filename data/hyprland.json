@@ -1,0 +1,22 @@
+{
+  "id": "hyprland",
+  "name": "Omarchy",
+  "icon": "",
+  "order": 100,
+  "detect": [
+    "hyprctl"
+  ],
+  "generator": "gen-hyprland",
+  "note": "Generated live from your own config via `omarchy-menu-keybindings --print`, so it never drifts from what is actually bound.",
+  "sections": [
+    {
+      "title": "Keybindings unavailable",
+      "entries": [
+        {
+          "keys": "omarchy-menu-keybindings --print",
+          "desc": "Could not read your live bindings — run this to see the error"
+        }
+      ]
+    }
+  ]
+}

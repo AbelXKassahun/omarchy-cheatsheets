@@ -1,0 +1,286 @@
+{
+  "id": "lazygit",
+  "name": "Lazygit",
+  "icon": "",
+  "order": 70,
+  "detect": [
+    "lazygit"
+  ],
+  "note": "Lazygit's own help is `?` in any panel — this is the set worth memorising.",
+  "sections": [
+    {
+      "title": "Getting around",
+      "entries": [
+        {
+          "keys": "1 … 5",
+          "desc": "Jump to panel: status, files, branches, commits, stash"
+        },
+        {
+          "keys": "Tab  /  Shift+Tab",
+          "desc": "Next / previous panel"
+        },
+        {
+          "keys": "h  l",
+          "desc": "Previous / next tab within a panel"
+        },
+        {
+          "keys": "j  k  or  ↑ ↓",
+          "desc": "Move the selection"
+        },
+        {
+          "keys": "C-d  C-u",
+          "desc": "Scroll the main view down / up"
+        },
+        {
+          "keys": "/",
+          "desc": "Filter the current panel"
+        },
+        {
+          "keys": "?",
+          "desc": "Show the keybindings for wherever you are"
+        },
+        {
+          "keys": "x",
+          "desc": "Open the menu of everything you can do here"
+        },
+        {
+          "keys": "q",
+          "desc": "Quit (or close the current view)"
+        },
+        {
+          "keys": "Escape",
+          "desc": "Cancel / go back"
+        },
+        {
+          "keys": "+  _",
+          "desc": "Grow / shrink the main panel"
+        }
+      ]
+    },
+    {
+      "title": "Files panel",
+      "entries": [
+        {
+          "keys": "Space",
+          "desc": "Stage / unstage the file"
+        },
+        {
+          "keys": "a",
+          "desc": "Stage / unstage everything"
+        },
+        {
+          "keys": "Enter",
+          "desc": "Stage individual lines or hunks"
+        },
+        {
+          "keys": "d",
+          "desc": "Discard the changes to this file"
+        },
+        {
+          "keys": "D",
+          "desc": "Reset menu — hard reset, clean, and friends"
+        },
+        {
+          "keys": "c",
+          "desc": "Commit the staged changes"
+        },
+        {
+          "keys": "C",
+          "desc": "Commit using the full git editor"
+        },
+        {
+          "keys": "A",
+          "desc": "Amend the last commit with what's staged"
+        },
+        {
+          "keys": "e",
+          "desc": "Edit the file"
+        },
+        {
+          "keys": "o",
+          "desc": "Open the file"
+        },
+        {
+          "keys": "i",
+          "desc": "Add the file to .gitignore"
+        },
+        {
+          "keys": "s",
+          "desc": "Stash changes"
+        },
+        {
+          "keys": "S",
+          "desc": "Stash menu — keep index, untracked, etc."
+        },
+        {
+          "keys": "f",
+          "desc": "Fetch"
+        }
+      ]
+    },
+    {
+      "title": "Staging individual lines",
+      "entries": [
+        {
+          "keys": "Space",
+          "desc": "Stage the selected line or hunk"
+        },
+        {
+          "keys": "v",
+          "desc": "Start a range selection"
+        },
+        {
+          "keys": "a",
+          "desc": "Select the whole hunk"
+        },
+        {
+          "keys": "d",
+          "desc": "Discard the selected line"
+        },
+        {
+          "keys": "Tab",
+          "desc": "Switch between the staged and unstaged views"
+        },
+        {
+          "keys": "Escape",
+          "desc": "Return to the files panel"
+        }
+      ]
+    },
+    {
+      "title": "Branches panel",
+      "entries": [
+        {
+          "keys": "Space",
+          "desc": "Check out the branch"
+        },
+        {
+          "keys": "n",
+          "desc": "New branch from here"
+        },
+        {
+          "keys": "d",
+          "desc": "Delete the branch"
+        },
+        {
+          "keys": "r",
+          "desc": "Rebase the current branch onto this one"
+        },
+        {
+          "keys": "M",
+          "desc": "Merge this branch into the current one"
+        },
+        {
+          "keys": "f",
+          "desc": "Fast-forward this branch from its upstream"
+        },
+        {
+          "keys": "o",
+          "desc": "Open a pull request"
+        },
+        {
+          "keys": "R",
+          "desc": "Rename the branch"
+        },
+        {
+          "keys": "u",
+          "desc": "Set the upstream"
+        }
+      ]
+    },
+    {
+      "title": "Commits panel",
+      "entries": [
+        {
+          "keys": "s",
+          "desc": "Squash this commit into the one below"
+        },
+        {
+          "keys": "f",
+          "desc": "Fixup — squash and drop this message"
+        },
+        {
+          "keys": "r",
+          "desc": "Reword the commit message"
+        },
+        {
+          "keys": "e",
+          "desc": "Mark for edit during an interactive rebase"
+        },
+        {
+          "keys": "d",
+          "desc": "Drop the commit"
+        },
+        {
+          "keys": "p",
+          "desc": "Pick the commit"
+        },
+        {
+          "keys": "C-j  C-k",
+          "desc": "Move the commit down / up in history"
+        },
+        {
+          "keys": "g",
+          "desc": "Reset the current branch to this commit"
+        },
+        {
+          "keys": "t",
+          "desc": "Revert the commit"
+        },
+        {
+          "keys": "c",
+          "desc": "Copy the commit (cherry-pick it later)"
+        },
+        {
+          "keys": "v",
+          "desc": "Paste the copied commits"
+        },
+        {
+          "keys": "T",
+          "desc": "Tag the commit"
+        },
+        {
+          "keys": "Enter",
+          "desc": "Look at the files this commit touched"
+        }
+      ]
+    },
+    {
+      "title": "Global actions",
+      "entries": [
+        {
+          "keys": "p",
+          "desc": "Pull"
+        },
+        {
+          "keys": "P",
+          "desc": "Push"
+        },
+        {
+          "keys": "f",
+          "desc": "Fetch"
+        },
+        {
+          "keys": "z  /  C-z",
+          "desc": "Undo / redo (via the reflog)"
+        },
+        {
+          "keys": "R",
+          "desc": "Refresh everything"
+        },
+        {
+          "keys": "@",
+          "desc": "Open the command log"
+        },
+        {
+          "keys": ":",
+          "desc": "Run a raw git command"
+        },
+        {
+          "keys": "W",
+          "desc": "Diffing menu"
+        }
+      ]
+    }
+  ]
+}

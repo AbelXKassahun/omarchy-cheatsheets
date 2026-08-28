@@ -1,0 +1,311 @@
+{
+  "id": "unity",
+  "name": "Unity",
+  "icon": "",
+  "order": 50,
+  "detect": [
+    "unityhub",
+    "unity-editor",
+    "Unity"
+  ],
+  "windowClasses": [
+    "Unity",
+    "UnityHub",
+    "unityhub"
+  ],
+  "note": "Unity Editor default shortcuts (Linux/Windows layout — swap Ctrl for Cmd on macOS). Unity has no CLI to dump these, so this sheet is hand-maintained; check Edit > Shortcuts if you have rebound anything.",
+  "sections": [
+    {
+      "title": "Transform tools",
+      "entries": [
+        {
+          "keys": "Q",
+          "desc": "Hand tool — pan the scene view"
+        },
+        {
+          "keys": "W",
+          "desc": "Move tool"
+        },
+        {
+          "keys": "E",
+          "desc": "Rotate tool"
+        },
+        {
+          "keys": "R",
+          "desc": "Scale tool"
+        },
+        {
+          "keys": "T",
+          "desc": "Rect transform tool"
+        },
+        {
+          "keys": "Y",
+          "desc": "Transform tool — move, rotate, scale at once"
+        },
+        {
+          "keys": "X",
+          "desc": "Toggle pivot orientation, global vs local"
+        },
+        {
+          "keys": "Z",
+          "desc": "Toggle pivot point, pivot vs center"
+        },
+        {
+          "keys": "V",
+          "desc": "Vertex snapping — hold while dragging"
+        },
+        {
+          "keys": "Ctrl + drag",
+          "desc": "Snap to the grid increment while moving"
+        }
+      ]
+    },
+    {
+      "title": "Scene view navigation",
+      "entries": [
+        {
+          "keys": "Right-mouse + WASD",
+          "desc": "Flythrough mode — fly around the scene"
+        },
+        {
+          "keys": "Right-mouse + Q / E",
+          "desc": "Fly down / up"
+        },
+        {
+          "keys": "Right-mouse + Shift",
+          "desc": "Fly faster"
+        },
+        {
+          "keys": "Alt + left-mouse",
+          "desc": "Orbit around the pivot"
+        },
+        {
+          "keys": "Alt + right-mouse",
+          "desc": "Zoom (same as scroll)"
+        },
+        {
+          "keys": "Middle-mouse drag",
+          "desc": "Pan the view"
+        },
+        {
+          "keys": "Scroll wheel",
+          "desc": "Zoom in and out"
+        },
+        {
+          "keys": "F",
+          "desc": "Frame the selected object"
+        },
+        {
+          "keys": "Shift + F",
+          "desc": "Lock the view onto the selection and follow it"
+        }
+      ]
+    },
+    {
+      "title": "Play mode",
+      "entries": [
+        {
+          "keys": "Ctrl + P",
+          "desc": "Play / stop"
+        },
+        {
+          "keys": "Ctrl + Shift + P",
+          "desc": "Pause / resume"
+        },
+        {
+          "keys": "Ctrl + Alt + P",
+          "desc": "Step one frame forward"
+        }
+      ]
+    },
+    {
+      "title": "GameObjects",
+      "entries": [
+        {
+          "keys": "Ctrl + Shift + N",
+          "desc": "New empty GameObject"
+        },
+        {
+          "keys": "Alt + Shift + N",
+          "desc": "New empty child of the selection"
+        },
+        {
+          "keys": "Ctrl + Shift + A",
+          "desc": "Add component to the selection"
+        },
+        {
+          "keys": "Ctrl + D",
+          "desc": "Duplicate the selection"
+        },
+        {
+          "keys": "Ctrl + Shift + G",
+          "desc": "Group the selected objects"
+        },
+        {
+          "keys": "Delete",
+          "desc": "Delete the selection"
+        },
+        {
+          "keys": "Ctrl + Alt + F",
+          "desc": "Move the object to the current view"
+        },
+        {
+          "keys": "Ctrl + Shift + F",
+          "desc": "Align the object with the current view"
+        }
+      ]
+    },
+    {
+      "title": "Editing and project",
+      "entries": [
+        {
+          "keys": "Ctrl + Z  /  Ctrl + Y",
+          "desc": "Undo / redo"
+        },
+        {
+          "keys": "Ctrl + X / C / V",
+          "desc": "Cut, copy, paste"
+        },
+        {
+          "keys": "Ctrl + S",
+          "desc": "Save the scene"
+        },
+        {
+          "keys": "Ctrl + Shift + S",
+          "desc": "Save the scene as…"
+        },
+        {
+          "keys": "Ctrl + N",
+          "desc": "New scene"
+        },
+        {
+          "keys": "Ctrl + O",
+          "desc": "Open scene"
+        },
+        {
+          "keys": "Ctrl + Shift + B",
+          "desc": "Build settings"
+        },
+        {
+          "keys": "Ctrl + B",
+          "desc": "Build and run"
+        },
+        {
+          "keys": "Ctrl + R",
+          "desc": "Refresh — reimport changed assets"
+        },
+        {
+          "keys": "Ctrl + F",
+          "desc": "Search the active window"
+        }
+      ]
+    },
+    {
+      "title": "Windows",
+      "entries": [
+        {
+          "keys": "Ctrl + 1",
+          "desc": "Scene view"
+        },
+        {
+          "keys": "Ctrl + 2",
+          "desc": "Game view"
+        },
+        {
+          "keys": "Ctrl + 3",
+          "desc": "Inspector"
+        },
+        {
+          "keys": "Ctrl + 4",
+          "desc": "Hierarchy"
+        },
+        {
+          "keys": "Ctrl + 5",
+          "desc": "Project browser"
+        },
+        {
+          "keys": "Ctrl + 6",
+          "desc": "Animation"
+        },
+        {
+          "keys": "Ctrl + 7",
+          "desc": "Profiler"
+        },
+        {
+          "keys": "Ctrl + 8",
+          "desc": "Package manager"
+        },
+        {
+          "keys": "Ctrl + 9",
+          "desc": "Asset store"
+        },
+        {
+          "keys": "Ctrl + 0",
+          "desc": "Version control"
+        },
+        {
+          "keys": "Ctrl + Shift + C",
+          "desc": "Console"
+        },
+        {
+          "keys": "Ctrl + Shift + Space",
+          "desc": "Maximize / restore the window under the cursor"
+        }
+      ]
+    },
+    {
+      "title": "Selection",
+      "entries": [
+        {
+          "keys": "Ctrl + A",
+          "desc": "Select all"
+        },
+        {
+          "keys": "Ctrl + D",
+          "desc": "Duplicate"
+        },
+        {
+          "keys": "Ctrl + Shift + D",
+          "desc": "Deselect all"
+        },
+        {
+          "keys": "Ctrl + I",
+          "desc": "Invert the selection"
+        },
+        {
+          "keys": "Ctrl + Alt + 1…9",
+          "desc": "Recall a saved selection"
+        },
+        {
+          "keys": "Ctrl + Shift + 1…9",
+          "desc": "Save the current selection to a slot"
+        },
+        {
+          "keys": "Ctrl + click (scene)",
+          "desc": "Add to the selection"
+        }
+      ]
+    },
+    {
+      "title": "Handy to remember",
+      "entries": [
+        {
+          "keys": "Edit > Shortcuts",
+          "desc": "The shortcut editor — rebind anything, see the full list"
+        },
+        {
+          "keys": "Ctrl + Shift + C",
+          "desc": "Console: where your Debug.Log output lands"
+        },
+        {
+          "keys": "Hold Shift in Inspector",
+          "desc": "Reveals debug values on some fields"
+        },
+        {
+          "keys": "Drag a label",
+          "desc": "Drag numeric field labels left/right to scrub the value"
+        }
+      ]
+    }
+  ]
+}
