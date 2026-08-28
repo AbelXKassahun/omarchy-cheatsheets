@@ -160,13 +160,34 @@ Item {
     selectSheet(root.sheetIndex + delta)
   }
 
+  // Scroll only when the row is actually off screen. positionViewAtIndex has to
+  // lay out delegates from the top of the model to work out where an index
+  // sits, and with variable-height rows that is O(n) — paying it on every
+  // arrow key is what makes holding a key down feel like wading. When the row
+  // is already visible, moving the selection is just a colour change.
+  function ensureVisible(index) {
+    if (index < 0) return
+    var item = resultList.itemAtIndex(index)
+    if (item) {
+      var top = item.y - resultList.contentY
+      if (top >= 0 && top + item.height <= resultList.height) return
+      // One row off either edge: nudge by exactly that much, which avoids the
+      // full relayout and keeps held-down arrows scrolling smoothly.
+      var max = Math.max(0, resultList.contentHeight - resultList.height)
+      var target = top < 0 ? item.y : item.y + item.height - resultList.height
+      resultList.contentY = Math.max(0, Math.min(max, target))
+      return
+    }
+    resultList.positionViewAtIndex(index, ListView.Contain)
+  }
+
   function move(delta) {
     if (root.rows.length === 0) return
     var from = root.selectedIndex >= 0 ? root.selectedIndex : -1
     var next = from < 0 ? Search.firstEntry(root.rows) : Search.step(root.rows, from, delta)
     if (next < 0) return
     root.selectedIndex = next
-    resultList.positionViewAtIndex(next, ListView.Contain)
+    ensureVisible(next)
   }
 
   function movePage(delta) {
@@ -188,7 +209,10 @@ Item {
     } else {
       root.selectedIndex = Search.firstEntry(root.rows)
     }
-    if (root.selectedIndex >= 0) resultList.positionViewAtIndex(root.selectedIndex, ListView.Contain)
+    // Home and End are the two cases where jumping the whole list is the point,
+    // so they go straight to the ends rather than through ensureVisible.
+    if (toEnd) resultList.positionViewAtEnd()
+    else resultList.positionViewAtBeginning()
   }
 
   function copySelected() {
@@ -445,17 +469,20 @@ Item {
             spacing: Style.spacing.xxs
 
             delegate: Rectangle {
+              id: sheetRow
+
               required property int index
               required property var modelData
 
               readonly property bool active: index === root.sheetIndex
 
               width: sheetList.width - Style.spacing.md
-              height: root.rowHeight
+              height: Math.max(root.rowHeight, sheetLabel.implicitHeight + Style.spacing.md * 2)
               radius: root.cornerRadius
               color: active ? root.selectedBackground : "transparent"
 
               Text {
+                id: sheetLabel
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: Style.spacing.rowPaddingX
@@ -467,7 +494,7 @@ Item {
                 font.family: root.fontFamily
                 font.pixelSize: Style.font.body
                 font.bold: active
-                elide: Text.ElideRight
+                wrapMode: Text.Wrap
               }
 
               MouseArea {
@@ -515,6 +542,32 @@ Item {
             clip: true
             boundsBehavior: Flickable.StopAtBounds
             visible: rowModel.count > 0
+
+            // The Omarchy sheet is 224 entries and every delegate is
+            // variable-height, so laying one out is not free. Recycling them
+            // and keeping a screen of them warm on each side is what keeps a
+            // fast scroll from rebuilding the world.
+            reuseItems: true
+            cacheBuffer: Math.max(0, Math.round(height * 2))
+            flickDeceleration: 6000
+            maximumFlickVelocity: 6000
+
+            // Qt's default wheel step is a few small lines, which reads as
+            // sluggish on a list this long. Touchpads send pixelDelta and are
+            // passed through at their own scale (they are already smooth);
+            // mouse wheels send angleDelta in eighths of a degree, converted
+            // here to three rows a notch.
+            WheelHandler {
+              acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+              onWheel: function(event) {
+                var dy = event.pixelDelta.y !== 0
+                  ? event.pixelDelta.y * 2
+                  : (event.angleDelta.y / 120) * root.rowHeight * 3
+                if (dy === 0) return
+                var max = Math.max(0, resultList.contentHeight - resultList.height)
+                resultList.contentY = Math.max(0, Math.min(max, resultList.contentY - dy))
+              }
+            }
 
             // Rows size to their content rather than to a fixed height: a
             // cheatsheet is full of long commands (`docker system prune -a
@@ -651,13 +704,20 @@ Item {
           opacity: 0.12
         }
 
+        // The footer grows to fit the sheet note rather than eliding it — a
+        // note that says "prefix is Ctrl+Space, with Ctrl+b kept as a…" has
+        // thrown away the half that mattered.
         Item {
           id: footer
           anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
-          height: Math.max(Style.space(18), Style.font.caption + Style.spacing.sm * 2)
+          height: Math.max(Style.space(18),
+                           Math.max(noteText.implicitHeight, hint.implicitHeight)
+                             + Style.spacing.sm * 2)
 
           Text {
-            anchors.verticalCenter: parent.verticalCenter
+            id: noteText
+            anchors.top: parent.top
+            anchors.topMargin: Style.spacing.sm
             anchors.left: parent.left
             anchors.right: hint.left
             anchors.rightMargin: Style.spacing.lg
@@ -667,12 +727,13 @@ Item {
             opacity: 0.45
             font.family: root.fontFamily
             font.pixelSize: Style.font.caption
-            elide: Text.ElideRight
+            wrapMode: Text.Wrap
           }
 
           Text {
             id: hint
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
+            anchors.topMargin: Style.spacing.sm
             anchors.right: parent.right
             text: "Tab sheet   ↑↓ move   ⏎ copy   ^R reload   Esc close"
             color: root.foreground
